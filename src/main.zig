@@ -2,15 +2,18 @@ const std = @import("std");
 const zigimg = @import("zigimg");
 const Wiggle = @import("wiggle.zig");
 
-const VERSION = "v0.0.0";
+const VERSION = "v0.1.0";
+const WIDTH = 240;
+const HEIGHT = 240;
+const PIXELS = WIDTH * HEIGHT;
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
+    var image_buffer: [WIDTH * HEIGHT * 4]u8 = undefined;
+    var fba = std.heap.FixedBufferAllocator.init(&image_buffer);
 
-    const allocator = gpa.allocator();
+    const allocator = fba.allocator();
 
-    var image = try zigimg.Image.create(allocator, 2, 2, .rgba32);
+    var image = try zigimg.Image.create(allocator, WIDTH, HEIGHT, .rgba32);
     defer image.deinit();
 
     // src.pixel_format.PixelFormat.rgba32
@@ -18,10 +21,11 @@ pub fn main() !void {
     const green = zigimg.Colors(zigimg.color.Rgba32).Green;
     const black = zigimg.Colors(zigimg.color.Rgba32).Black;
 
-    image.pixels.rgba32[0] = black;
-    image.pixels.rgba32[1] = green;
-    image.pixels.rgba32[2] = green;
-    image.pixels.rgba32[3] = black;
+    for (0..PIXELS) |i| {
+        image.pixels.rgba32[i] = black;
+    }
+    image.pixels.rgba32[28920] = green;
+    image.pixels.rgba32[28921] = green;
 
     const wiggle = Wiggle.from(std.time.milliTimestamp());
 

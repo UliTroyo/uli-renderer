@@ -39,37 +39,40 @@ fn drawLine(x0: i32, y0: i32, x1: i32, y1: i32) void {
 }
 
 fn line(x0: i32, y0: i32, x1: i32, y1: i32) void {
-    const dx = x1 - x0;
-    const dy = y1 - y0;
-    const rise_longer_than_run = @abs(dx) > @abs(dy);
-    var adjust = if (dy < 0) -1 else 1;
+    const run = x1 - x0;
+    const rise = y1 - y0;
+    const rise_longer_than_run = @abs(run) > @abs(rise);
 
     if (rise_longer_than_run) {
         // we loop through x's
-        var D = (2 * dy) - dx;
+        const y_should_decrement = rise < 0;
+        const adjust = if (y_should_decrement) -1 else 1;
+        var threshold = (2 * rise) - run;
         var y = y0;
 
-        while (x < x1) {
-            // plot(y,x)
-            if (D > 0) {
+        for (x0..x1) |_| {
+            // plot(x,y)
+            if (threshold > 0) {
                 y += adjust;
-                D = D + (2 * (dy - dx));
+                threshold = threshold + (2 * (rise - run));
             } else {
-                D = D + (2 * dy);
+                threshold = threshold + (2 * rise);
             }
         }
     } else {
         // we loop through y's
-        var D = (2 * dx) - dy;
+        const x_should_decrement = rise < 0;
+        const adjust = if (x_should_decrement) -1 else 1;
+        var threshold = (2 * run) - rise;
         var x = x0;
 
-        while (y < y1) {
+        for (y0..y1) |_| {
             // plot(x,y)
-            if (D > 0) {
+            if (threshold > 0) {
                 x += adjust;
-                D = D + (2 * (dx - dy));
+                threshold = threshold + (2 * (run - rise));
             } else {
-                D = D + (2 * dx);
+                threshold = threshold + (2 * run);
             }
         }
     }

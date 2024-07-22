@@ -41,36 +41,35 @@ fn drawLine(x0: i32, y0: i32, x1: i32, y1: i32) void {
 fn line(x0: i32, y0: i32, x1: i32, y1: i32) void {
     const dx = x1 - x0;
     const dy = y1 - y0;
-    const run_longer_than_rise = @abs(dy) > @abs(dx);
+    const rise_longer_than_run = @abs(dx) > @abs(dy);
+    var adjust = if (dy < 0) -1 else 1;
 
-    if (run_longer_than_rise) {
-        // we loop through y's
-        var offset = if (dx < 0) -1 else 1;
-        var threshold = (2 * dx) - dy;
-        var x = x0;
-
-        while (y < y1) {
-            // plot(x,y)
-            if (threshold > 0) {
-                x = x + offset;
-                D = D + (2 * (dx - dy));
-            } else {
-                D = D + (2 * dx);
-            }
-        }
-    } else {
+    if (rise_longer_than_run) {
         // we loop through x's
-        var offset = if (dy < 0) -1 else 1;
-        var threshold = (2 * dy) - dx;
+        var D = (2 * dy) - dx;
         var y = y0;
 
         while (x < x1) {
             // plot(y,x)
-            if (threshold > 0) {
-                y = y + offset;
+            if (D > 0) {
+                y += adjust;
                 D = D + (2 * (dy - dx));
             } else {
                 D = D + (2 * dy);
+            }
+        }
+    } else {
+        // we loop through y's
+        var D = (2 * dx) - dy;
+        var x = x0;
+
+        while (y < y1) {
+            // plot(x,y)
+            if (D > 0) {
+                x += adjust;
+                D = D + (2 * (dx - dy));
+            } else {
+                D = D + (2 * dx);
             }
         }
     }

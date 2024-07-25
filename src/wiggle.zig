@@ -1,6 +1,7 @@
 const std = @import("std");
 
-const digits = [_]u8{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+// const digits = [_]u8{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+const digits = [_]u8{ 'O', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
 const base22 = [_]u8{ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 const base32 = digits ++ base22;
 const jan_1_2020 = 1577836800000;

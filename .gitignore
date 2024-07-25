@@ -1,5 +1,6 @@
 .DS_Store
 .zig-cache/
 zig-out/
-*.png
 images/
+scripts/
+exclude.zig
